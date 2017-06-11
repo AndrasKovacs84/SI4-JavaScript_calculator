@@ -2,35 +2,85 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font: bold 4px;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #748bb2;
+    /* font: bold 40px Arial, Helvetica, sans-serif; */
+    font: bold 40px 'Audiowide';
+    text-shadow: -1px -1px 1px #fff, 1px 1px 1px #000;
+    /* font-family: Arial, Helvetica, sans-serif; */ 
 }
 
 #calculator {
     width: 480px;
     height: 680px;
-    background: lightblue;
+    background: radial-gradient(#7b8ead, #33558c);
     border-radius: 3px;
     margin: 100px auto;
     padding: 20px 20px 9px;
+  	box-shadow: 0px 10px #34496b, 0px 20px 40px rgba(0, 0, 0, 0.2);
+
 }
 
 #screen {
     height: 100px;
     width: 440px;
+    padding: 3px 3px 3px 3px;
     background: whitesmoke;
     border-radius: 3px;
     margin: 0 10px 10px 0;
+    box-shadow: inset 0px 3px #34496b;
+    font: bold 20px 'Audiowide';
+    text-shadow: 0px 0px 0px #fff, 0px 0px 0px #000;
+    color: #000;
+    letter-spacing: 2px;
 }
 
 #keys span{
+    user-select: none;
     float: left;
     position: relative;
+    top: 0px;
     width: 100px;
     height: 100px;
-    background: lightgrey;
+    background: linear-gradient(to bottom, #50719b 0%,#848db5 2%,#476891 12%,#a2b6d6 100%);
     border-radius: 3px;
     text-align: center;
    	margin: 0 10px 10px 0;
     line-height: 100px;
+    box-shadow: 0px 4px #34496b, 0px 10px 15px rgba(0, 0, 0, 0.2);
+  	transition: all 0.2s ease;
+}
+
+[class^="fa"] {
+    display: inline-block;
+    position: relative;
+    top: 25px;
+
+}
+
+#keys span:hover{
+    float: left;
+    position: relative;
+    top: 0px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to bottom, #d0e4f7 0%,#0a77d5 12%,#539fe1 79%,#87bcea 100%);
+    border-radius: 3px;
+    text-align: center;
+   	margin: 0 10px 10px 0;
+    line-height: 100px;
+    box-shadow: 0px 4px #34496b, 0px 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+#keys span:active{
+    float: left;
+    position: relative;
+    top: 4px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to bottom, #d0e4f7 0%,#0a77d5 12%,#539fe1 79%,#87bcea 100%);
+    border-radius: 3px;
+    text-align: center;
+   	margin: 0 10px 10px 0;
+    line-height: 100px;
+    box-shadow: 0px 0px #34496b, 0px 10px 15px rgba(0, 0, 0, 0.2);
 }

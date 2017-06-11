@@ -1,7 +1,6 @@
 var keys = document.getElementById("keys").getElementsByTagName("span");
 var inputSequence = "";
 var operators = ["+", "-", "X", "/", "%"]
-var openParentheses = 0;
 
 for (var i=0; i < keys.length; i++) {
     keys[i].addEventListener("click", activated)
@@ -12,16 +11,12 @@ function activated() {
     var screen = document.getElementById("screen")
     var numbers = document.getElementsByClassName("number");
     var button = this.innerHTML;
+    var lastChar = inputSequence.slice(-1);
 
     if (this.id === "clear"){
         inputSequence = "";
         screen.innerHTML = inputSequence;    
     } else if (this.id === "backspace") {
-        if (inputSequence.slice(-1) === "("){
-            openParentheses -= 1;
-        } else if (inputSequence.slice(-1) === ")") {
-            openParentheses += 1;
-        }
         inputSequence = inputSequence.slice(0,-1);
         screen.innerHTML = inputSequence;
     } else if (this.className === "number") {
@@ -32,7 +27,11 @@ function activated() {
         }
         screen.innerHTML = inputSequence;
     } else if (this.className === "operator") {
-        inputSequence += this.innerHTML;
+        if (!operators.includes(lastChar) && inputSequence === "" && this.innerHTML === "-") {
+            inputSequence += this.innerHTML;
+        } else if (!operators.includes(lastChar) && inputSequence !== "") {
+            inputSequence += this.innerHTML;
+        }
         screen.innerHTML = inputSequence;
     } else if (this.id === "decimal") {
         inputSequence = handleDecimal(inputSequence);
@@ -41,19 +40,24 @@ function activated() {
         inputSequence = handleBrackets(inputSequence);
         screen.innerHTML = inputSequence;
     } else if (this.id === "equals") {
+        inputSequence = inputSequence.replace(/[\X(]$/, "").replace(/[\,\(\-\+\X\/]$/, "");
+        var openParentheses = countNeededNrOfParentheses();
+
         if (openParentheses > 0){
-            for (var i = 0; i < openParentheses.length -1; i++) {
+            var neededNrOfParentheses = openParentheses;
+            for (var i = 0; i < neededNrOfParentheses; i++) {
                 inputSequence += ")";
+                openParentheses -= 1;
             }
         }
-        inputSequence = inputSequence.replace(/[\X(]$/, "").replace(/[\,\(\-\+\X\/]$/, "");
+
         screen.innerHTML = inputSequence;
         result = inputSequence;
         result = result.replace(/X/g, "*").replace(/,/g, ".");
-        alert(result);
         result = eval(result);
         result = String(result).replace(/\./g, ",");
         screen.innerHTML = inputSequence + " = " + result;
+        inputSequence = "";
     }
 }
 
@@ -73,30 +77,8 @@ function handleDecimal(inputSequence) {
 }
 
 
-function handleBrackets(inputSequence) {
-    var parenthesesToAdd = "(";
-    var lastChar = inputSequence.slice(-1);
-
-    if (operators.includes(inputSequence.slice(-1))) {
-        parenthesesToAdd = "(";
-        openParentheses += 1;
-    } else if (Number(lastChar) != NaN && inputSequence.length > 0 && openParentheses === 0) {
-        parenthesesToAdd = "X(";
-        openParentheses += 1;
-    } else if (Number(lastChar) != NaN && openParentheses > 0) {
-        parenthesesToAdd = ")";
-        openParentheses -= 1;
-    } else {
-        parenthesesToAdd = "(";
-        openParentheses += 1;
-    }
-    return inputSequence + parenthesesToAdd;
-}
-
-
-/*    
+function countNeededNrOfParentheses() {
     var openParentheses = 0;
-
     for (var i = 0; i < inputSequence.length; i++) {
         if (inputSequence[i] === "("){
             openParentheses += 1;
@@ -104,16 +86,24 @@ function handleBrackets(inputSequence) {
             openParentheses -= 1;
         }
     }
+    return openParentheses;
+}
+
+
+function handleBrackets(inputSequence) {
+    var parenthesesToAdd = "(";
+    var lastChar = inputSequence.slice(-1);
+    var openParentheses = countNeededNrOfParentheses();
+
     if (operators.includes(inputSequence.slice(-1))) {
         parenthesesToAdd = "(";
-    } else if (Number(lastChar) != NaN && inputSequence.length > 0 && openParentheses === 0) {
+    } else if (Number(lastChar) !== NaN && inputSequence.length > 0 && openParentheses === 0) {
         parenthesesToAdd = "X(";
-    } else if (Number(lastChar) != NaN && openParentheses > 0) {
+    } else if (Number(lastChar) !== NaN && openParentheses > 0) {
         parenthesesToAdd = ")";
-    } else {
+    } else if (lastChar === "("){ 
         parenthesesToAdd = "(";
     }
     return inputSequence + parenthesesToAdd;
 }
-*/
 
