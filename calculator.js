@@ -1,14 +1,14 @@
 var keys = document.getElementById("keys").getElementsByTagName("span");
 var inputSequence = "";
-var operators = ["+", "-", "X", "/", "%"]
+const operators = ["+", "-", "X", "/", "%"];
 
 for (var i=0; i < keys.length; i++) {
-    keys[i].addEventListener("click", activated)
+    keys[i].addEventListener("click", activated);
 }
 
 
 function activated() {
-    var screen = document.getElementById("screen")
+    var screen = document.getElementById("screen");
     var numbers = document.getElementsByClassName("number");
     var button = this.innerHTML;
     var lastChar = inputSequence.slice(-1);
@@ -29,7 +29,11 @@ function activated() {
     } else if (this.className === "operator") {
         if (!operators.includes(lastChar) && inputSequence === "" && this.innerHTML === "-") {
             inputSequence += this.innerHTML;
+        } else if (lastChar === ",") {
+            inputSequence = inputSequence.slice(0,-1);
+            inputSequence += this.innerHTML;
         } else if (!operators.includes(lastChar) && inputSequence !== "") {
+            alert(lastChar);
             inputSequence += this.innerHTML;
         }
         screen.innerHTML = inputSequence;
@@ -99,10 +103,10 @@ function handleBrackets(inputSequence) {
         parenthesesToAdd = "(";
     } else if (Number(lastChar) !== NaN && inputSequence.length > 0 && openParentheses === 0) {
         parenthesesToAdd = "X(";
-    } else if (Number(lastChar) !== NaN && openParentheses > 0) {
-        parenthesesToAdd = ")";
     } else if (lastChar === "("){ 
         parenthesesToAdd = "(";
+    } else if (Number(lastChar) !== NaN && openParentheses > 0) {
+        parenthesesToAdd = ")";
     }
     return inputSequence + parenthesesToAdd;
 }
